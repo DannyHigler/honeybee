@@ -2,11 +2,25 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Set canvas to window size
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Update game object positions when resizing
+    gameState.hive.y = canvas.height / 2 - 40;
+    gameState.flower.x = canvas.width - 100;
+    gameState.flower.y = canvas.height - 100;
+}
+
+// Initial canvas setup
+resizeCanvas();
+
 // Game state
 const gameState = {
     bee: {
         x: 100,
-        y: canvas.height / 2,
+        y: window.innerHeight / 2,
         width: 30,
         height: 20,
         speed: 3,
@@ -16,13 +30,13 @@ const gameState = {
     },
     hive: {
         x: 50,
-        y: canvas.height / 2 - 40,
+        y: window.innerHeight / 2 - 40,
         width: 80,
         height: 80
     },
     flower: {
-        x: canvas.width - 100,
-        y: canvas.height - 100,
+        x: window.innerWidth - 100,
+        y: window.innerHeight - 100,
         width: 50,
         height: 60
     }
@@ -350,6 +364,9 @@ function gameLoop() {
     draw();
     requestAnimationFrame(gameLoop);
 }
+
+// Handle window resize
+window.addEventListener('resize', resizeCanvas);
 
 // Start the game
 gameLoop();
