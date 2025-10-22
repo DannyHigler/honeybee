@@ -11,7 +11,8 @@ const gameState = {
         height: 20,
         speed: 3,
         isLanded: false,
-        landedOnFlower: null
+        landedOnFlower: null,
+        facingRight: true
     },
     hive: {
         x: 50,
@@ -181,6 +182,15 @@ function drawFlower() {
 function drawBee() {
     const bee = gameState.bee;
 
+    // Save canvas state and flip if facing left
+    ctx.save();
+
+    if (!bee.facingRight) {
+        // Flip horizontally
+        ctx.translate(bee.x * 2, 0);
+        ctx.scale(-1, 1);
+    }
+
     // Bee body
     ctx.fillStyle = '#FFD700';
     ctx.beginPath();
@@ -223,6 +233,9 @@ function drawBee() {
     ctx.beginPath();
     ctx.arc(bee.x + 10, bee.y + 3, 2, 0, Math.PI * 2);
     ctx.fill();
+
+    // Restore canvas state
+    ctx.restore();
 }
 
 // Check if bee is near flower
@@ -267,9 +280,11 @@ function update() {
         }
         if (keys.left) {
             gameState.bee.x -= gameState.bee.speed;
+            gameState.bee.facingRight = false;
         }
         if (keys.right) {
             gameState.bee.x += gameState.bee.speed;
+            gameState.bee.facingRight = true;
         }
 
         // Keep bee within canvas bounds
